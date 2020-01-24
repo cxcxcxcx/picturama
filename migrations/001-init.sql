@@ -17,6 +17,8 @@ CREATE TABLE "photos" (
     "iso"             integer,
     "focal_length"    integer,
     "aperture"        float,
+    "lat"             float,
+    "lng"             float,
     "flag"            boolean NOT NULL DEFAULT '0',
     "trashed"         boolean NOT NULL DEFAULT '0'
 );

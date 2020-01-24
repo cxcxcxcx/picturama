@@ -7,7 +7,7 @@ import { Action } from 'app/state/ActionType'
 import {
     INIT, SET_SETTINGS, FETCH_TOTAL_PHOTO_COUNT, FETCH_SECTIONS_REQUEST, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAILURE,
     CHANGE_PHOTOS, EMPTY_TRASH,
-    FETCH_TAGS, INIT_DEVICES, ADD_DEVICE, REMOVE_DEVICE, FORGET_SECTION_PHOTOS, FETCH_SECTION_PHOTOS
+    FETCH_TAGS, INIT_DEVICES, ADD_DEVICE, REMOVE_DEVICE, FORGET_SECTION_PHOTOS, FETCH_SECTION_PHOTOS, FETCH_ALL_PHOTOS, SET_MAP_SETTINGS
 } from 'app/state/actionTypes'
 import { DataState, TagsState, DevicesState, SectionsState } from 'app/state/StateTypes'
 import { FetchState } from 'app/UITypes'
@@ -81,7 +81,8 @@ const initialSectionsState: SectionsState = {
     totalPhotoCount: null,
     photoCount: 0,
     ids: [],
-    byId: {}
+    byId: {},
+    photos: {},
 }
 
 const sections = (state: SectionsState = initialSectionsState, action: Action): SectionsState => {
@@ -90,6 +91,11 @@ const sections = (state: SectionsState = initialSectionsState, action: Action): 
             return {
                 ...state,
                 totalPhotoCount: action.payload.totalPhotoCount
+            }
+        case FETCH_ALL_PHOTOS:
+            return {
+                ...state,
+                photos: action.payload.photoSet.photoData
             }
         case FETCH_SECTIONS_REQUEST:
             return {

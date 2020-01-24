@@ -48,6 +48,22 @@ export async function fetchSections(filter: PhotoFilter, sectionIdsToKeepLoaded?
 }
 
 
+export async function fetchAllPhotos(filter: PhotoFilter): Promise<PhotoSet> {
+    const photoSet: PhotoSet = { photoIds: [], photoData: {} }
+
+    const filterWhere = createWhereForFilter(filter)
+    const allPhotos = await DB().query<Photo>(
+        `select * from photos where ${filterWhere.sql} order by created_at asc`,
+        ...filterWhere.params)
+    for (const photo of allPhotos) {
+        const sectionId: PhotoSectionId = photo.date_section
+        photoSet.photoIds.push(photo.id)
+        photoSet.photoData[photo.id] = photo
+    }
+
+    return photoSet
+}
+
 export async function fetchSectionPhotos(sectionIds: PhotoSectionId[], filter: PhotoFilter): Promise<PhotoSet[]> {
     if (!sectionIds.length) {
         return []
@@ -93,6 +109,14 @@ function createWhereForFilter(filter: PhotoFilter): { sql: string, params: any[]
     if (filter.type === 'tag') {
         sql += ' and id in (select photo_id from photos_tags where tag_id = ?)'
         params.push(filter.tagId)
+    }
+
+    if (filter.type === 'geo') {
+        sql += ' and lat BETWEEN ? AND ? AND lng BETWEEN ? AND ?'
+        console.log("Filter", filter, filter.bounds)
+        params.push(
+            filter.bounds.latSW, filter.bounds.latNE,
+            filter.bounds.lngSW, filter.bounds.lngNE)
     }
 
     return { sql, params }

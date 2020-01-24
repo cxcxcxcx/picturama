@@ -103,6 +103,10 @@ export default {
         return callOnBackground('fetchSectionPhotos', { sectionIds, filter })
     },
 
+    fetchAllPhotos(filter: PhotoFilter): Promise<PhotoSet> {
+        return callOnBackground('fetchAllPhotos', { filter })
+    },
+
     updatePhotos(photoIds: PhotoId[], update: Partial<Photo>): Promise<void> {
         return callOnBackground('updatePhotos', { photoIds, update })
     },

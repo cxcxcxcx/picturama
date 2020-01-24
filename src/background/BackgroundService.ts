@@ -8,7 +8,7 @@ import { exportPhoto } from 'background/ExportController'
 import ForegroundClient from 'background/ForegroundClient'
 import { startImport, toggleImportPaused, cancelImport } from 'background/ImportController'
 import { fetchPhotoWorkOfPhoto, storePhotoWork } from 'background/store/PhotoWorkStore'
-import { fetchTotalPhotoCount, fetchSections, updatePhotos, fetchPhotoDetail, fetchSectionPhotos, emptyTrash } from 'background/store/PhotoStore'
+import { fetchTotalPhotoCount, fetchSections, updatePhotos, fetchPhotoDetail, fetchSectionPhotos, emptyTrash, fetchAllPhotos } from 'background/store/PhotoStore'
 import { fetchSettings, storeSettings } from 'background/store/SettingsStore'
 import { fetchTags, storePhotoTags } from 'background/store/TagStore'
 import { createThumbnail, deleteThumbnail } from 'background/store/ThumbnailStore'
@@ -85,6 +85,8 @@ async function executeBackgroundAction(action: string, params: any): Promise<any
         return fetchSections(params.filter, params.sectionIdsToKeepLoaded)
     } else if (action === 'fetchSectionPhotos') {
         return fetchSectionPhotos(params.sectionIds, params.filter)
+    } else if (action === 'fetchAllPhotos') {
+        return fetchAllPhotos(params.filter)
     } else if (action === 'updatePhotos') {
         return updatePhotos(params.photoIds, params.update)
     } else if (action === 'fetchPhotoDetail') {

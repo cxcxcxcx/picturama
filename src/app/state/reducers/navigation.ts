@@ -1,12 +1,16 @@
 import { Action } from 'app/state/ActionType'
-import { SET_FULL_SCREEN, OPEN_SETTINGS, CLOSE_SETTINGS, OPEN_DIFF, CLOSE_DIFF } from 'app/state/actionTypes'
+import { SET_FULL_SCREEN, OPEN_SETTINGS, CLOSE_SETTINGS, OPEN_DIFF, CLOSE_DIFF, SET_MAP_SETTINGS } from 'app/state/actionTypes'
 
 import { NavigationState, DetailState } from 'app/state/StateTypes'
 
 
 const initialNavigationState: NavigationState = {
     isFullScreen: false,
-    mainView: null
+    mainView: null,
+    map: {
+        zoom: 2,
+        center: {lat: 40, lng: 120}
+    }
 }
 
 export const navigation = (state: NavigationState = initialNavigationState, detailState: DetailState | null, action: Action): NavigationState => {
@@ -15,6 +19,11 @@ export const navigation = (state: NavigationState = initialNavigationState, deta
             return {
                 ...state,
                 isFullScreen: action.payload
+            }
+        case SET_MAP_SETTINGS:
+            return {
+                ...state,
+                map: action.payload
             }
         case OPEN_SETTINGS:
             return {

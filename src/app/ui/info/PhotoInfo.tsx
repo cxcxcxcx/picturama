@@ -169,6 +169,7 @@ export default class PhotoInfo extends React.Component<Props, State> {
                             </div>
                         </div>
                     }
+        <div>LatLng: {photo.lat}, {photo.lng}</div>
                     <div className="PhotoInfo-infoRow">
                         <FaIcon className="PhotoInfo-infoIcon" name="tags" style={{ fontSize: infoIconSize }} />
                         <TagEditor

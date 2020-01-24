@@ -1,4 +1,4 @@
-import { PhotoId, TagId, TagById, Device, PhotoSectionId, PhotoSectionById, Settings, UiConfig, PhotoDetail, PhotoWork, ImportProgress, PhotoFilter, PhotoExportOptions, PhotoExportProgress} from 'common/CommonTypes'
+import { PhotoId, TagId, TagById, Device, PhotoSectionId, PhotoSectionById, Settings, UiConfig, PhotoDetail, PhotoWork, ImportProgress, PhotoFilter, PhotoExportOptions, PhotoExportProgress, Photo, PhotoById} from 'common/CommonTypes'
 import { FetchState } from 'app/UITypes'
 
 
@@ -11,10 +11,15 @@ export type AppState = {
     export: ExportState
 }
 
+export type MapState = {
+    zoom: number
+    center: google.maps.LatLngLiteral
+}
 
 export type NavigationState = {
     isFullScreen: boolean
     mainView: MainViewState
+    map: MapState
 }
 
 export type MainViewState = 'settings' | 'detail' | 'diff' | null
@@ -69,6 +74,7 @@ export type SectionsState = {
     readonly photoCount: number
     readonly ids: PhotoSectionId[]
     readonly byId: PhotoSectionById
+    readonly photos: PhotoById
 }
 
 

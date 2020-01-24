@@ -5,7 +5,7 @@ import { assertRendererProcess } from 'common/util/ElectronUtil'
 import BackgroundClient from 'app/BackgroundClient'
 import { showError } from 'app/ErrorPresenter'
 import store from 'app/state/store'
-import { fetchTotalPhotoCountAction, fetchSectionsAction, changePhotoWorkAction, changePhotosAction } from 'app/state/actions'
+import { fetchTotalPhotoCountAction, fetchSectionsAction, changePhotoWorkAction, changePhotosAction, fetchAllPhotosAction } from 'app/state/actions'
 
 
 assertRendererProcess()
@@ -17,6 +17,8 @@ let thumbnailVersion = Date.now()
 export function fetchTotalPhotoCount() {
     BackgroundClient.fetchTotalPhotoCount()
         .then(totalPhotoCount => store.dispatch(fetchTotalPhotoCountAction(totalPhotoCount)))
+    BackgroundClient.fetchAllPhotos(store.getState().library.filter)
+        .then(allPhotos => store.dispatch(fetchAllPhotosAction(allPhotos)))
 }
 
 export function fetchSections(sectionIdsToKeepLoaded?: PhotoSectionId[]) {
@@ -28,6 +30,7 @@ export function setLibraryFilter(newFilter: PhotoFilter) {
 }
 
 function internalFetchSections(newFilter: PhotoFilter | null, sectionIdsToKeepLoaded?: PhotoSectionId[]) {
+    console.log("New filter", newFilter)
     const filter = newFilter || store.getState().library.filter
 
     store.dispatch(fetchSectionsAction.request({ newFilter }))

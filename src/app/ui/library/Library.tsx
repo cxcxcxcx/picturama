@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { ipcRenderer } from 'electron'
 import { Button, NonIdealState, Spinner, MaybeElement, Icon, INonIdealStateProps } from '@blueprintjs/core'
 
-import { PhotoId, Photo, PhotoWork, PhotoSectionId, PhotoSectionById, isLoadedPhotoSection, PhotoDetail, PhotoFilterType } from 'common/CommonTypes'
+import { PhotoId, Photo, PhotoWork, PhotoSectionId, PhotoSectionById, isLoadedPhotoSection, PhotoDetail, PhotoFilterType, PhotoById } from 'common/CommonTypes'
 import { msg } from 'common/i18n/i18n'
 import CancelablePromise from 'common/util/CancelablePromise'
 import { bindMany } from 'common/util/LangUtil'
@@ -28,6 +28,7 @@ import LibraryBottomBar from './LibraryBottomBar'
 import Grid from './Grid'
 
 import './Library.less'
+import PhotoMap from './PhotoMap'
 
 
 const nonIdealStateMaxWidth = 400
@@ -48,6 +49,7 @@ interface StateProps {
     libraryFilterType: PhotoFilterType
     photoCount: number
     totalPhotoCount: number | null
+    allPhotos?: PhotoById
     sectionIds: PhotoSectionId[]
     sectionById: PhotoSectionById
     selectedSectionId: PhotoSectionId | null
@@ -209,6 +211,7 @@ export class Library extends React.Component<Props, State> {
         const photoData = isLoadedPhotoSection(selectedSection) && selectedSection.photoData
         const selectedPhotos = photoData ? props.selectedPhotoIds.map(photoId => photoData[photoId]) : []
 
+      
         return (
             <div
                 ref="library"
@@ -238,6 +241,7 @@ export class Library extends React.Component<Props, State> {
                             <NonIdealState {...nonIdealStateProps}/>
                         </>
                     }
+                        <PhotoMap allPhotos={props.allPhotos} />
                     {!nonIdealStateProps &&
                         <Grid
                             className="Library-grid"
@@ -285,6 +289,7 @@ export class Library extends React.Component<Props, State> {
 
 const Connected = connect<StateProps, DispatchProps, OwnProps, AppState>(
     (state: AppState, props) => {
+        console.log("Connecting")
         const sections = state.data.sections
 
         let infoPhoto: Photo | null = null
@@ -302,6 +307,7 @@ const Connected = connect<StateProps, DispatchProps, OwnProps, AppState>(
             libraryFilterType: state.library.filter.type,
             photoCount: sections.photoCount,
             totalPhotoCount: sections.totalPhotoCount,
+            allPhotos: sections.photos,
             sectionIds: sections.ids,
             sectionById: sections.byId,
             selectedSectionId: state.library.selection.sectionId,

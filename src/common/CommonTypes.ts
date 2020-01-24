@@ -41,6 +41,8 @@ export interface Photo {
     focal_length?: number,
     /** Example: 5.6 */
     aperture?: number,
+    lat?: number,
+    lng?: number,
     /** Whether the image is flagged. */
     flag: 0 | 1,
     /** Example: 0 */
@@ -155,12 +157,13 @@ export function isLoadedPhotoSection(section: PhotoSection | null | undefined |
 export type PhotoSectionById = { [K in PhotoSectionId]: PhotoSection | LoadedPhotoSection }
 
 
-export type PhotoFilterType = 'all' | 'flagged' | 'processed' | 'trash' | 'tag'
+export type PhotoFilterType = 'all' | 'flagged' | 'processed' | 'trash' | 'tag' | 'geo'
 export type PhotoFilter =
     { readonly type: 'all' } |
     { readonly type: 'flagged' } |
     { readonly type: 'trash' } |
-    { readonly type: 'tag', readonly tagId: TagId }
+    { readonly type: 'tag', readonly tagId: TagId } |
+    { readonly type: 'geo', readonly bounds: {readonly latSW, latNE, lngSW, lngNE: number}}
     // TODO: Revive Legacy code of 'version' feature
     // -> Add 'processed'
 

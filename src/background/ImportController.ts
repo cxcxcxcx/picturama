@@ -94,6 +94,7 @@ class ImportScannerDelegateImpl implements ImportScannerDelegate {
     }
 
     async storePhotoInDb(masterFullPath: string, photo: Photo, tempNonRawImgPath: string | null, tags: string[]): Promise<void> {
+        console.log("Store", photo)
         photo.id = await DB().insert('photos', photo)
         if (tempNonRawImgPath) {
             const nonRawPath = getNonRawPath(photo)

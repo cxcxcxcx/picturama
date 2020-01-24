@@ -10,8 +10,9 @@ import {
     FETCH_SECTION_PHOTOS, FORGET_SECTION_PHOTOS,
     CHANGE_PHOTOWORK, CHANGE_PHOTOS, EMPTY_TRASH, SET_IMPORT_PROGRESS, FETCH_TAGS, SET_PHOTO_TAGS,
     INIT_DEVICES, ADD_DEVICE, REMOVE_DEVICE, OPEN_DIFF, CLOSE_DIFF, OPEN_EXPORT, CLOSE_EXPORT, SET_EXPORT_OPTIONS,
-    TOGGLE_SHOW_EXPORT_REMOVE_INFO_DESC, SET_EXPORT_PROGRESS
+    TOGGLE_SHOW_EXPORT_REMOVE_INFO_DESC, SET_EXPORT_PROGRESS, FETCH_ALL_PHOTOS, SET_MAP_SETTINGS
 } from './actionTypes'
+import { MapState } from './StateTypes'
 
 
 export const initAction = (uiConfig: UiConfig, settings: Settings) => action(INIT, { uiConfig, settings })
@@ -19,6 +20,7 @@ export const setFullScreenAction = (isFullScreen: boolean) => action(SET_FULL_SC
 export const openSettingsAction = () => action(OPEN_SETTINGS)
 export const setSettingsAction = (settings: Settings) => action(SET_SETTINGS, settings)
 export const closeSettingsAction = () => action(CLOSE_SETTINGS)
+export const setMapAction = (mapState: MapState) => action(SET_MAP_SETTINGS, mapState)
 
 export const setGridRowHeightAction = (gridRowHeight: number) => action(SET_GRID_ROW_HEIGHT, { gridRowHeight })
 
@@ -32,6 +34,8 @@ export const setLibraryInfoPhotoAction = createAsyncAction(SET_LIBRARY_INFO_PHOT
 export const fetchTotalPhotoCountAction = (totalPhotoCount: number) => action(FETCH_TOTAL_PHOTO_COUNT, { totalPhotoCount })
 export const fetchSectionsAction = createAsyncAction(FETCH_SECTIONS_REQUEST, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAILURE)<{ newFilter: PhotoFilter | null }, { sections: PhotoSection[] }, Error>()
 export const fetchSectionPhotosAction = (sectionIds: PhotoSectionId[], photoSets: PhotoSet[]) => action(FETCH_SECTION_PHOTOS, { sectionIds, photoSets })
+export const fetchAllPhotosAction = (photoSet: PhotoSet) => action(FETCH_ALL_PHOTOS, { photoSet })
+
 export const forgetSectionPhotosAction = (sectionIds: { [index: string]: true }) => action(FORGET_SECTION_PHOTOS, { sectionIds })
 export const changePhotoWorkAction = (photoId: PhotoId, photoWork: PhotoWork) => action(CHANGE_PHOTOWORK, { photoId, photoWork })
 export const changePhotosAction = (photos: Photo[], update: Partial<Photo>) => action(CHANGE_PHOTOS, { photos, update })

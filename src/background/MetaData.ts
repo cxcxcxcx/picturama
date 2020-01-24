@@ -5,7 +5,10 @@ import { isArray } from 'common/util/LangUtil'
 
 import { fsStat, fsReadFile } from 'background/util/FileUtil'
 
-
+export interface LatLng {
+    lat: number
+    lng: number
+}
 export interface MetaData {
     imgWidth?:     number
     imgHeight?:    number
@@ -15,6 +18,7 @@ export interface MetaData {
     aperture?:     number
     focalLength?:  number
     createdAt?:    Date
+    latLng?: LatLng
     /** Details on orientation: https://www.impulseadventure.com/photo/exif-orientation.html */
     orientation:   ExifOrientation
     tags:          string[]
@@ -87,6 +91,27 @@ function extractMetaDataFromExif(exifData): MetaData {
         iso = exifTags.ISO[0]
     }
 
+    let latLng:LatLng|undefined = undefined;
+    const lat = exifTags.GPSLatitude;
+    const lon = exifTags.GPSLongitude;
+    console.log('lat', lat, 'lng', lon, 'exifTags', exifTags);
+
+    if (isArray(lat)) {
+        //Convert coordinates to WGS84 decimal
+        const latRef = exifTags.GPSLatitudeRef || "N";
+        const lonRef = exifTags.GPSLongitudeRef || "W";
+        if (lat && lon) {
+            latLng = {
+                lat: (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1),
+                lng: (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1),
+            }
+        }
+    } else {
+        latLng = {
+            lat, lng: lon
+        }
+    }
+
     const metaData: MetaData = {
         imgWidth:     (exifData.imageSize && exifData.imageSize.width)  || exifTags.ExifImageWidth,
         imgHeight:    (exifData.imageSize && exifData.imageSize.height) || exifTags.ExifImageHeight,
@@ -97,6 +122,7 @@ function extractMetaDataFromExif(exifData): MetaData {
         focalLength:  exifTags.FocalLength,
         createdAt:    rawDate ? new Date(rawDate * 1000) : undefined,
         orientation:  exifTags.Orientation || 1,
+        latLng,
             // Details on orientation: https://www.impulseadventure.com/photo/exif-orientation.html
         tags:         []
     }

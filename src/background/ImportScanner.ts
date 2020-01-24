@@ -448,6 +448,8 @@ export default class ImportScanner {
                 master_is_raw: isRaw ? 1 : 0,
                 edited_width,
                 edited_height,
+                lat: metaData.latLng && metaData.latLng.lat,
+                lng: metaData.latLng && metaData.latLng.lng,
                 date_section: moment(createdAt).format('YYYY-MM-DD'),
                 created_at: createdAt.getTime(),
                 updated_at: fileStats.mtime.getTime(),
