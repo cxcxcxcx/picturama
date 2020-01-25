@@ -37,6 +37,7 @@ export default {
     menuPath: `${menusFolder}/${platform}.json`,
     dbFile: `${picturamaHomeDir}/db.sqlite3`,
     dbMigrationsFolder: `${picturamaAppDir}/migrations`,
+    images: `${picturamaAppDir}/src/static/images/`,
     settings: `${picturamaHomeDir}/settings.json`,
     nonRawPath: `${picturamaHomeDir}/non-raw`,
     thumbnailPath: `${picturamaHomeDir}/thumbnails`,

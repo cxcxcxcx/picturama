@@ -9,6 +9,7 @@ import { setLibraryFilter } from 'app/controller/PhotoController'
 import { AppState } from 'app/state/StateTypes'
 import store from "app/state/store";
 import { setMapAction } from "app/state/actions";
+import config from "common/config";
 
 interface OwnProps {
     allPhotos?: PhotoById
@@ -92,16 +93,27 @@ export class PhotoMap extends React.Component<Props> {
           >
             <MarkerClusterer
                 onClick={props.onMarkerClustererClick}
-                imagePath={"./static/images/m"}
                 styles={[{
-                    textColor: 'white',
-                    url: './images/m1.png',
-                    height: 50,
-                    width: 50}, {
-                        textColor: 'white',
-                        url: './images/m2.png',
-                        height: 50,
-                        width: 50}]}
+                    url: config.images + '/m1.png',
+                    height: 53,
+                    width: 53
+                }, {
+                    url: config.images + '/m2.png',
+                    height: 56,
+                    width: 56
+                }, {
+                    url: config.images + '/m3.png',
+                    height: 66,
+                    width: 66
+                }, {
+                    url: config.images + '/m4.png',
+                    height: 78,
+                    width: 78
+                }, {
+                    url: config.images + '/m5.png',
+                    height: 90,
+                    width: 90
+                }]}
                 averageCenter
                 enableRetinaIcons
                 gridSize={60}

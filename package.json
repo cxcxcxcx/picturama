@@ -43,7 +43,8 @@
       "to": "app",
       "filter": [
         "menus/**",
-        "migrations/**"
+        "migrations/**",
+        "src/static/images/m*.png"
       ]
     }
   },
