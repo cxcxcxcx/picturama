@@ -118,12 +118,15 @@ export class PhotoMap extends React.Component<Props> {
                 enableRetinaIcons
                 gridSize={60}
             >
-            {Object.keys(props.allPhotos || {}).map(photoId => (
+            {Object.keys(props.allPhotos || {})
+            .map(photoId => [photoId, props.allPhotos[photoId]]).filter(
+                (a) => a[1].lat && a[1].lng
+            ).map((a) =>
                 <Marker
-                key={photoId}
-                position={{ lat: props.allPhotos[photoId].lat, lng: props.allPhotos[photoId].lng }}
+                key={a[0]}
+                position={{ lat: a[1].lat, lng: a[1].lng }}
                 />
-            ))}
+            )}
             </MarkerClusterer>
           </GoogleMap>
         )
