@@ -10,7 +10,30 @@ import { AppState } from 'app/state/StateTypes'
 import store from "app/state/store";
 import { setMapAction } from "app/state/actions";
 import config from "common/config";
-import { wgs2gcj, gcj2wgs } from "eviltransform";
+import { wgs2gcj, gcj2wgs, gcj2wgs_exact } from "eviltransform";
+
+function gcj2wgs_exact2(gcjLat, gcjLng) {
+	// newCoord = oldCoord = gcjCoord
+	var newLat = gcjLat, newLng = gcjLng;
+	var oldLat = newLat, oldLng = newLng;
+	var threshold = 1e-6; // ~0.55 m equator & latitude
+
+	for (var i = 0; i < 30; i++) {
+		// oldCoord = newCoord
+		oldLat = newLat;
+		oldLng = newLng;
+		// newCoord = gcjCoord - wgs_to_gcj_delta(newCoord)
+		var tmp = wgs2gcj(newLat, newLng);
+		// approx difference using gcj-space difference
+		newLat += gcjLat - tmp.lat;
+		newLng += gcjLng - tmp.lng;
+		// diffchk
+		if (Math.max(Math.abs(oldLat - newLat), Math.abs(oldLng - newLng)) < threshold) {
+			break;
+		}
+	}
+	return {lat: newLat, lng: newLng};
+}
 
 interface OwnProps {
     allPhotos?: PhotoById
@@ -55,8 +78,10 @@ export class PhotoMap extends React.Component<Props> {
                     return
                 }
                 const bounds = markerCluster.getBounds()
-                const ne = gcj2wgs(bounds.getNorthEast().lat(), bounds.getNorthEast().lng());
-                const sw = gcj2wgs(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
+                console.log("Received", bounds.getNorthEast().toJSON(), wgs2gcj, gcj2wgs, gcj2wgs_exact);
+                const ne = gcj2wgs_exact2(bounds.getNorthEast().lat(), bounds.getNorthEast().lng());
+                const sw = gcj2wgs_exact2(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
+                console.log(ne, "Back:", wgs2gcj(ne.lat, ne.lng))
                 this.props.setLibraryFilter({
                     type: "geo",
                     bounds: {latNE: ne.lat+1e-5, latSW: sw.lat-1e-5,
