@@ -59,8 +59,8 @@ export class PhotoMap extends React.Component<Props> {
                 const sw = gcj2wgs_exact(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
                 this.props.setLibraryFilter({
                     type: "geo",
-                    bounds: {latNE: ne.lat+1e-6, latSW: sw.lat-1e-6,
-                        lngNE: ne.lng+1e-6, lngSW: sw.lng-1e-6,}
+                    bounds: {latNE: ne.lat+1e-5, latSW: sw.lat-1e-5,
+                        lngNE: ne.lng+1e-5, lngSW: sw.lng-1e-5,}
                 })
                 console.log(markerCluster);
             },
