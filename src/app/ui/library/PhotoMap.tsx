@@ -43,7 +43,7 @@ export class PhotoMap extends React.Component<Props> {
         }
         const MyMapComponent = compose(
           withProps({
-            googleMapURL: "https://maps.google.cn/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY",
+            googleMapURL: "https://maps.google.cn/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY&region=US",
             loadingElement: <div style={{ height: `300px` }} />,
             containerElement: <div style={{ height: `400px` }} />,
             mapElement: <div style={{ height: `300px` }} />,
