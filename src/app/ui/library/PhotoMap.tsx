@@ -10,6 +10,7 @@ import { AppState } from 'app/state/StateTypes'
 import store from "app/state/store";
 import { setMapAction } from "app/state/actions";
 import config from "common/config";
+import { wgs2gcj } from "eviltransform";
 
 interface OwnProps {
     allPhotos?: PhotoById
@@ -43,7 +44,7 @@ export class PhotoMap extends React.Component<Props> {
         }
         const MyMapComponent = compose(
           withProps({
-            googleMapURL: "https://maps.google.cn/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY&region=US",
+            googleMapURL: "https://maps.google.cn/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY",
             loadingElement: <div style={{ height: `300px` }} />,
             containerElement: <div style={{ height: `400px` }} />,
             mapElement: <div style={{ height: `300px` }} />,
@@ -124,7 +125,7 @@ export class PhotoMap extends React.Component<Props> {
             ).map((a) =>
                 <Marker
                 key={a[0]}
-                position={{ lat: a[1].lat, lng: a[1].lng }}
+                position={ wgs2gcj(a[1].lat, a[1].lng)}
                 />
             )}
             </MarkerClusterer>
