@@ -10,7 +10,7 @@ import { AppState } from 'app/state/StateTypes'
 import store from "app/state/store";
 import { setMapAction } from "app/state/actions";
 import config from "common/config";
-import { wgs2gcj, gcj2wgs_exact } from "eviltransform";
+import { wgs2gcj, gcj2wgs } from "eviltransform";
 
 interface OwnProps {
     allPhotos?: PhotoById
@@ -55,8 +55,8 @@ export class PhotoMap extends React.Component<Props> {
                     return
                 }
                 const bounds = markerCluster.getBounds()
-                const ne = gcj2wgs_exact(bounds.getNorthEast().lat(), bounds.getNorthEast().lng());
-                const sw = gcj2wgs_exact(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
+                const ne = gcj2wgs(bounds.getNorthEast().lat(), bounds.getNorthEast().lng());
+                const sw = gcj2wgs(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
                 this.props.setLibraryFilter({
                     type: "geo",
                     bounds: {latNE: ne.lat+1e-5, latSW: sw.lat-1e-5,
