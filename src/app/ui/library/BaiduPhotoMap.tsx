@@ -10,7 +10,7 @@ import { setMapAction } from "app/state/actions";
 import config from "common/config";
 import { wgs2bd, bd2wgs } from "eviltransform";
 import { asyncWrapper } from 'react-baidu-maps';
-import { BaiduMap, ScaleControl, MarkerClusterer, Marker } from 'react-baidu-maps';
+import { BaiduMap, ScaleControl, MapTypeControl, NavigationControl, MarkerClusterer, Marker } from 'react-baidu-maps';
 
 
 interface OwnProps {
@@ -49,8 +49,8 @@ export class PhotoMapBaidu extends React.Component<Props> {
               zoom={m.zoom}
               center={m.center}
               onClick={(e) => {
-                  console.log(e);
-                  const dist = 7e-3 * Math.pow(2, 14 - e.target.getZoom())
+                  console.log(e, "Zoom level", e.target.getZoom());
+                  const dist = 1.2e-2 * Math.pow(2, 14 - e.target.getZoom())
                   console.log("map", dist, e.target.getZoom(), e.target.getCenter());
                   const p = bd2wgs(e.point.lat, e.point.lng);
                   const bounds = {latNE: p.lat+dist, latSW: p.lat-dist,
@@ -62,7 +62,12 @@ export class PhotoMapBaidu extends React.Component<Props> {
                   })
                 }}
               mapContainer={<div style={{ height: '100%' }} />} >
-            <ScaleControl  />
+<MapTypeControl  />
+<ScaleControl  />
+  <NavigationControl
+    type="small"
+    anchor="top_right"
+    offset={{ width: 0, height: 30 }} />
 
             <MarkerClusterer>
                 {Object.keys(props.allPhotos || {})
