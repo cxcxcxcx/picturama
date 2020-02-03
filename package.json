@@ -104,7 +104,7 @@
     "normalize.css": "^8.0.1",
     "piexifjs": "1.0.6",
     "react": "^16.12.0",
-    "react-baidu-maps": "^1.0.11",
+    "react-baidu-maps": "https://github.com/cxcxcxcx/react-baidu-maps#dist",
     "react-dom": "^16.12.0",
     "react-google-maps": "^9.4.5",
     "react-icons": "^3.8.0",

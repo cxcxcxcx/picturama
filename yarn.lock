@@ -6891,10 +6891,9 @@ rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-baidu-maps@^1.0.11:
+"react-baidu-maps@https://github.com/cxcxcxcx/react-baidu-maps#dist":
   version "1.0.11"
-  resolved "https://registry.yarnpkg.com/react-baidu-maps/-/react-baidu-maps-1.0.11.tgz#88471fcd2b57a0324bbc6513a6733e3211e44751"
-  integrity sha512-NW6TBFsgWwbfk1XBHMuBRj2IS+Qxg84sivCtD+WHOPSYMzKBEmjCkwkL+yjdFuEW7dMD70d/vtJQsmizIyxgPQ==
+  resolved "https://github.com/cxcxcxcx/react-baidu-maps#287826c9b0e057f0e65360b2335c419211e91629"
   dependencies:
     prop-types "~15.7.2"
     scriptjs "~2.5.9"

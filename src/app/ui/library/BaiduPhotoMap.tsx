@@ -46,11 +46,13 @@ export class PhotoMapBaidu extends React.Component<Props> {
               mapUrl={`http://api.map.baidu.com/api?v=3.0&ak=FLGL9Os0DoodIHC5cFrgZwPgWfGkYCCE`}
               loadingElement={<div>Loading.....</div>}
               enableScrollWheelZoom
+              enableMapClick={false}
+              enableDoubleClickZoom={false}
               zoom={m.zoom}
               center={m.center}
               onClick={(e) => {
                   console.log(e, "Zoom level", e.target.getZoom());
-                  const dist = 1.2e-2 * Math.pow(2, 14 - e.target.getZoom())
+                  const dist = 6e-3 * Math.pow(2, 14 - e.target.getZoom())
                   console.log("map", dist, e.target.getZoom(), e.target.getCenter());
                   const p = bd2wgs(e.point.lat, e.point.lng);
                   const bounds = {latNE: p.lat+dist, latSW: p.lat-dist,
