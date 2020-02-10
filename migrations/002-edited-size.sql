@@ -25,13 +25,11 @@ CREATE TABLE "photos_new" (
     "iso"             integer,
     "focal_length"    integer,
     "aperture"        float,
-    "lat"             float,
-    "lng"             float,
     "flag"            boolean NOT NULL DEFAULT '0',
     "trashed"         boolean NOT NULL DEFAULT '0'
 );
-INSERT INTO photos_new (id, master_dir, master_filename, master_width, master_height, master_is_raw, edited_width, edited_height, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed, lat, lng)
-    SELECT id, master_dir, master_filename, master_width, master_height, master_is_raw, master_width, master_height, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed, lat, lng
+INSERT INTO photos_new (id, master_dir, master_filename, master_width, master_height, master_is_raw, edited_width, edited_height, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed)
+    SELECT id, master_dir, master_filename, master_width, master_height, master_is_raw, master_width, master_height, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed
     FROM photos;
 DROP TABLE photos;
 ALTER TABLE photos_new RENAME TO photos;
@@ -64,13 +62,11 @@ CREATE TABLE "photos" (
     "iso"             integer,
     "focal_length"    integer,
     "aperture"        float,
-    "lat"             float,
-    "lng"             float,
     "flag"            boolean NOT NULL DEFAULT '0',
     "trashed"         boolean NOT NULL DEFAULT '0'
 );
-INSERT INTO photos_new (id, master_dir, master_filename, master_width, master_height, master_is_raw, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed, lat, lng)
-    SELECT id, master_dir, master_filename, master_width, master_height, master_is_raw, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed, lat, lng
+INSERT INTO photos_new (id, master_dir, master_filename, master_width, master_height, master_is_raw, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed)
+    SELECT id, master_dir, master_filename, master_width, master_height, master_is_raw, date_section, created_at, updated_at, imported_at, orientation, camera, exposure_time, iso, focal_length, aperture, flag, trashed
     FROM photos;
 DROP TABLE photos;
 ALTER TABLE photos_new RENAME TO photos;

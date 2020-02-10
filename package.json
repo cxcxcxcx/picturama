@@ -1,5 +1,5 @@
 {
-  "name": "picturama",
+  "name": "picturama-geo",
   "productName": "Picturama",
   "version": "1.2.0-dev",
   "description": "Digital image organizer powered by the web",
@@ -158,5 +158,5 @@
     "webpack-fix-default-import-plugin": "^1.0.3",
     "webpack-node-externals": "^1.7.2"
   },
-  "repository": "https://github.com/picturama/picturama.git"
+  "repository": "https://github.com/cxcxcxcx/picturama.git"
 }

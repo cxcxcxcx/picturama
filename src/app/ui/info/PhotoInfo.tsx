@@ -169,7 +169,19 @@ export default class PhotoInfo extends React.Component<Props, State> {
                             </div>
                         </div>
                     }
-        <div>LatLng: {photo.lat}, {photo.lng}</div>
+                    {photo.lat && photo.lng &&
+                    <div className="PhotoInfo-infoRow">
+                        <Icon className="PhotoInfo-infoIcon" icon="map-marker" iconSize={infoIconSize} />
+                        <div className="PhotoInfo-infoBody">
+                            <h1 className="PhotoInfo-infoTitle hasColumns">
+                                Location (Lat, Lng)
+                            </h1>
+                            <div className="PhotoInfo-minorInfo">
+                                <div>{`${photo.lat.toFixed(6)}, ${photo.lng.toFixed(6)}`}</div>
+                            </div>
+                        </div>
+                    </div>
+                    }
                     <div className="PhotoInfo-infoRow">
                         <FaIcon className="PhotoInfo-infoIcon" name="tags" style={{ fontSize: infoIconSize }} />
                         <TagEditor
