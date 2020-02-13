@@ -7,33 +7,6 @@ import { PhotoById, PhotoFilter } from "common/CommonTypes";
 import { connect } from "react-redux";
 import { setLibraryFilter } from 'app/controller/PhotoController'
 import { AppState } from 'app/state/StateTypes'
-import store from "app/state/store";
-import { setMapAction } from "app/state/actions";
-import config from "common/config";
-import { wgs2gcj, gcj2wgs, gcj2wgs_exact } from "eviltransform";
-
-function gcj2wgs_exact2(gcjLat, gcjLng) {
-	// newCoord = oldCoord = gcjCoord
-	var newLat = gcjLat, newLng = gcjLng;
-	var oldLat = newLat, oldLng = newLng;
-	var threshold = 1e-6; // ~0.55 m equator & latitude
-
-	for (var i = 0; i < 30; i++) {
-		// oldCoord = newCoord
-		oldLat = newLat;
-		oldLng = newLng;
-		// newCoord = gcjCoord - wgs_to_gcj_delta(newCoord)
-		var tmp = wgs2gcj(newLat, newLng);
-		// approx difference using gcj-space difference
-		newLat += gcjLat - tmp.lat;
-		newLng += gcjLng - tmp.lng;
-		// diffchk
-		if (Math.max(Math.abs(oldLat - newLat), Math.abs(oldLng - newLng)) < threshold) {
-			break;
-		}
-	}
-	return {lat: newLat, lng: newLng};
-}
 
 interface OwnProps {
     allPhotos?: PhotoById
@@ -48,7 +21,7 @@ interface StateProps {
     center: google.maps.LatLngLiteral
 }
 
-export interface Props extends OwnProps, StateProps, DispatchProps {}
+export interface Props extends OwnProps, DispatchProps {}
 
 export class PhotoMap extends React.Component<Props> {
     render() {
@@ -67,10 +40,10 @@ export class PhotoMap extends React.Component<Props> {
         }
         const MyMapComponent = compose(
           withProps({
-            googleMapURL: "https://maps.google.cn/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY",
-            loadingElement: <div style={{ height: `300px` }} />,
+            googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry,drawing,places&key=AIzaSyD2XPeQTx_TB5BtnAaH4l1xOKhD70ca3eY",
+            loadingElement: <div style={{ height: `400px` }} />,
             containerElement: <div style={{ height: `400px` }} />,
-            mapElement: <div style={{ height: `300px` }} />,
+            mapElement: <div style={{ height: `400px` }} />,
           }),
           withHandlers({
             onMarkerClustererClick: () => (markerCluster: Cluster) => {
@@ -78,14 +51,12 @@ export class PhotoMap extends React.Component<Props> {
                     return
                 }
                 const bounds = markerCluster.getBounds()
-                console.log("Received", bounds.getNorthEast().toJSON(), wgs2gcj, gcj2wgs, gcj2wgs_exact);
-                const ne = gcj2wgs_exact2(bounds.getNorthEast().lat(), bounds.getNorthEast().lng());
-                const sw = gcj2wgs_exact2(bounds.getSouthWest().lat(), bounds.getSouthWest().lng());
-                console.log(ne, "Back:", wgs2gcj(ne.lat, ne.lng))
+                const ne = bounds.getNorthEast();
+                const sw = bounds.getSouthWest();
                 this.props.setLibraryFilter({
                     type: "geo",
-                    bounds: {latNE: ne.lat+1e-5, latSW: sw.lat-1e-5,
-                        lngNE: ne.lng+1e-5, lngSW: sw.lng-1e-5,}
+                    bounds: {latNE: ne.lat()+1e-5, latSW: sw.lat()-1e-5,
+                        lngNE: ne.lng()+1e-5, lngSW: sw.lng()-1e-5,}
                 })
                 console.log(markerCluster);
             },
@@ -101,14 +72,8 @@ export class PhotoMap extends React.Component<Props> {
                 const zoom = map.getZoom();
                 const center = map.getCenter().toJSON();
                 localStorage.setItem('c', JSON.stringify({zoom, center}))
-                // setTimeout(() => store.dispatch(setMapAction({
-                //     zoom,
-                //     center
-                // })))
-                // return true;
             },
             onMapMounted: () => ref => {
-                console.log("Mounted", this.state)
                 refs.map = ref
             }
           }),
@@ -124,27 +89,6 @@ export class PhotoMap extends React.Component<Props> {
           >
             <MarkerClusterer
                 onClick={props.onMarkerClustererClick}
-                styles={[{
-                    url: config.images + '/m1.png',
-                    height: 53,
-                    width: 53
-                }, {
-                    url: config.images + '/m2.png',
-                    height: 56,
-                    width: 56
-                }, {
-                    url: config.images + '/m3.png',
-                    height: 66,
-                    width: 66
-                }, {
-                    url: config.images + '/m4.png',
-                    height: 78,
-                    width: 78
-                }, {
-                    url: config.images + '/m5.png',
-                    height: 90,
-                    width: 90
-                }]}
                 averageCenter
                 enableRetinaIcons
                 gridSize={60}
@@ -156,7 +100,7 @@ export class PhotoMap extends React.Component<Props> {
                 <Marker
                 key={a[0]}
                 onClick={props.markerClicked.bind(this,a[1])}
-                position={ wgs2gcj(a[1].lat, a[1].lng)}
+                position={ a[1] }
                 />
             )}
             </MarkerClusterer>
@@ -166,15 +110,9 @@ export class PhotoMap extends React.Component<Props> {
     }
 }
 
-const Connected = connect<StateProps, DispatchProps, OwnProps, AppState>(
+const Connected = connect<{}, DispatchProps, OwnProps, AppState>(
     (state: AppState, props: OwnProps) => {
-        // console.log(state)
-        const m = state.navigation.map
-        console.log("Connect again", m)
-        return {...props,
-          zoom: m.zoom,
-          center: m.center
-        }
+        return props
     },
     dispatch => ({
         setLibraryFilter,

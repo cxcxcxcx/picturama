@@ -29,6 +29,7 @@ import Grid from './Grid'
 
 import './Library.less'
 import PhotoMapBaidu from './BaiduPhotoMap'
+import PhotoMap from './PhotoMap'
 
 
 const nonIdealStateMaxWidth = 400
@@ -241,7 +242,8 @@ export class Library extends React.Component<Props, State> {
                             <NonIdealState {...nonIdealStateProps}/>
                         </>
                     }
-                        <PhotoMapBaidu allPhotos={props.allPhotos} />
+                    <PhotoMap allPhotos={props.allPhotos} />
+                        {/* <PhotoMapBaidu allPhotos={props.allPhotos} /> */}
                     {!nonIdealStateProps &&
                         <Grid
                             className="Library-grid"

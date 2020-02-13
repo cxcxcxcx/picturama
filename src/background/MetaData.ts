@@ -48,6 +48,13 @@ function readExifOfImage(imagePath) {
     let done = false;
     let readStream = fs.createReadStream(imagePath);
     return new Promise((resolve, reject) => {
+      const processor = () => {
+        const buffer = Buffer.concat(chunks);
+        const parser = ExifParser.create(buffer) as any
+        done = true;
+        readStream.destroy();
+        resolve(parser.parse());
+      }
       readStream
         .on('data', function (chunk: Buffer) {
           if (done) {
@@ -57,13 +64,15 @@ function readExifOfImage(imagePath) {
           chunks.push(chunk);
   
           if (totalBytes > 70000) {
-              const buffer = Buffer.concat(chunks);
-              const parser = ExifParser.create(buffer) as any
-              done = true;
-              readStream.destroy();
-              resolve(parser.parse());
+              processor();
+          }
+      }).on('end', () => {
+          if (!done) {
+              processor();
           }
       })
+    }).catch((err) => {
+        console.error("Parse error for file ", imagePath, err);
     })
 }
 
