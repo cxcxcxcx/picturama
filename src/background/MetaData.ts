@@ -49,11 +49,16 @@ function readExifOfImage(imagePath) {
     let readStream = fs.createReadStream(imagePath);
     return new Promise((resolve, reject) => {
       const processor = () => {
-        const buffer = Buffer.concat(chunks);
-        const parser = ExifParser.create(buffer) as any
-        done = true;
-        readStream.destroy();
-        resolve(parser.parse());
+        try {
+            const buffer = Buffer.concat(chunks);
+            const parser = ExifParser.create(buffer) as any
+            done = true;
+            readStream.destroy();
+            const result = parser.parse();
+            resolve(result);
+        } catch (e) {
+            reject(e);
+        }
       }
       readStream
         .on('data', function (chunk: Buffer) {
